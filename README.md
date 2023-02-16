@@ -9,6 +9,6 @@ Students are expected to:
 Student Info
 =========================
 
-* Student Name: Hồ Minh Quang 
+* Student Name: HỒ MINH QUANG
 * Student ID: BI12-370
 
