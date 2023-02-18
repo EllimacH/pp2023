@@ -26,14 +26,14 @@ def input_course():
 
 
 def input_mark(student_list: list, course_list: list):
-    # Mark = float(input("Enter the mark of the student: "))
-    # while True:
-    #     try:
-    #         if Mark < 0 or Mark > 20:
-    #             raise ValueError
-    #         break
-    #     except ValueError:
-    #         Mark = float(input("Invalid mark, please try again: "))
+    Mark = float(input("Enter the mark of the student: "))
+    while True:
+        try:
+            if Mark < 0 or Mark > 20:
+                raise ValueError
+            break
+        except ValueError:
+            Mark = float(input("Invalid mark, please try again: "))
 
     for course in course_list:
         print(course)
