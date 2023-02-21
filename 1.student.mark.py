@@ -1,10 +1,18 @@
 import os
 import re
 
+#Function to input student information
 def input_student(students: list) -> None:
-    temp = {}
+    temp = {} # create a temp dictionary to store student information
+
     student_name = input("Enter student name: ")
-    student_id = input("Enter student id: ").upper()
+
+    while True: # check to see if student name is valid
+            if re.match(r"[a-zA-Z ]+", student_name): # using regex to check if student name is valid
+                break
+            else:
+                student_name = input("Student name is not valid, please try again: ")
+    student_id = input("Enter student id: ").upper() # convert to uppercase
 
     while True:
         # if student id is BIxx-xxx (x is digit)
@@ -27,6 +35,7 @@ def input_student(students: list) -> None:
     temp["course"] = []
     students.append(temp)
 
+#input course information
 def input_course(courses: list) -> None:
     temp = {}
     course_name = input('Enter course name: ')
@@ -35,19 +44,20 @@ def input_course(courses: list) -> None:
     temp["course_id"] = course_id
     courses.append(temp)
 
+#input mark
 def input_mark(students: list, courses: list) -> None:
     student_id_input = input("Enter student id you want to input mark: ")
     course_id_input = input("Enter course id to input mark: ")
     mark = input("Enter mark: ")
     course_name_searced = ""
 
-    for course in courses:
+    for course in courses:# search for course name
         if course["course_id"] == course_id_input:
             course_name = course["course_name"] 
             break
         
     
-    for student in students:
+    for student in students:# search for student id
         if student["student_id"] == student_id_input:
             student["course"].append({"course_name": course_name, "mark": mark})
             break
@@ -59,8 +69,8 @@ def main ():
 
     while True:
 
-        print("\033c")
-
+        print("\033c") # clear screen
+        #print out all the options
         print("1. Input student")
         print("2. Input course")
         print("3. Input mark")
@@ -79,7 +89,7 @@ def main ():
             except ValueError:
                 choice = input("Input not valid , please try again: ")
 
-        match choice:
+        match choice: # match the choice with the function
             case 1: 
                 input_student(students)
             case 2:
