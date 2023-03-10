@@ -5,9 +5,6 @@ students = []
 courses = []
 marks = []
 
-# Function to input student information
-
-
 class student:
     def __init__(self, student_name: str, student_id: str, student_DOB=str) -> None:
         self.student_name = student_name
@@ -30,6 +27,9 @@ class course:
         self.course_name = course_name
         self.course_id = course_id
 
+    def __str__(self) -> str:
+        return f"Course name: {self.course_name}, Course id: {self.course_id}"
+
     def get_course_name(self) -> str:
         return self.course_name
 
@@ -45,6 +45,7 @@ class mark:
     def get_mark(self) -> float:
         return self.mark
 
+# Function to input student information
 
 def input_student() -> None:
 
@@ -56,15 +57,16 @@ def input_student() -> None:
             break
         else:
             student_name = input(
-                "Student name is not valid, please try again: ")
+                "Student name is not valid, please try again : ")
 
     student_id = input("Enter student id: ").upper()
-    #if student id is BIxx-xxx (x is digit)
+    # if student id is BIxx-xxx (x is digit)
     while True:
         if re.match(r"BI\d{2}-\d{3}", student_id):
             break
         else:
-            student_id = input("Student id is not valid, please try again: ")
+            student_id = input(
+                "Student id is not valid, please try again with format BIxx-yyy with x and y is number: ")
 
     student_DOB = input("Enter student DoB: ")
     # if DoB is xx-xx-xxxx or xx/xx/xxxx
@@ -72,9 +74,11 @@ def input_student() -> None:
         if re.match(r"\d{2}-\d{2}-\d{4}", student_DOB) or re.match(r"\d{2}/\d{2}/\d{4}", student_DOB):
             break
         else:
-            student_DOB = input("DoB is not valid, please try again: ")
+            student_DOB = input(
+                "DoB is not valid, please try again with format dd-mm-yyyy or dd/mm/yyyy: ")
 
-    studentt = student(student_name=student_name, student_id=student_id, student_DOB=student_DOB)
+    studentt = student(student_name=student_name,
+                       student_id=student_id, student_DOB=student_DOB)
     students.append(studentt)
 
 
@@ -85,7 +89,8 @@ def input_course() -> None:
 
 
 def input_mark() -> None:
-    student_id_input = input("Enter student id you want to input mark: ")
+    student_id_input = input(
+        "Enter student id you want to input mark: ").upper()
     course_id_input = input("Enter course id you want to input mark: ")
     mark_input = input("Enter mark: ")
     selected_student = None
@@ -100,32 +105,25 @@ def input_mark() -> None:
         if course.course_id == course_id_input:
             selected_course = course
             break
-    
+
     if selected_student is not None and selected_course is not None:
-        mark = mark(mark_input)
-        marks.append(mark)  
-        
-    # for course in courses:
-    #     if course.id == course_id_input:
-    #         course_name = course.name
-
-    # for student in students:
-    #     if student.student_id == student_id_input:
-    #         student["course"].append(
-    #             {"course_name": course_name, "mark": mark_input})
-    #         break
-
+        mark_object = mark(mark_input)
+        marks.append(mark_object)
+        selected_course.mark = mark_object
+        selected_student.course = selected_course
+    else:
+        print("Student or course not found")
 
 def print_student() -> None:
     for student in students:
-                    print("="*20)
-                    print("Student name: " + student["student_name"])
-                    print("Student id: " + student["student_id"])
-                    print("Date of birth: " + student["Date of birth"])
-                    for course in student["course"]:
-                        # print("Course: " + course["course_name"] + ": " + course["mark"])
-                        print(
-                            f"Course: {course['course_name']}: {course['mark']}")
+        print("="*20)
+        print("Student name: " + student.student_name)
+        print("Student id: " + student.student_id)
+        print("Date of birth: " + student.student_DOB)
+        print("Course name: " + student.course.get_course_name())
+        print("Course id: " + student.course.get_course_id())
+        print("Mark: " + str(student.course.mark.get_mark()))
+        print("="*20)
 
 
 def print_course() -> None:
@@ -175,11 +173,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# courses = []
-# input_course(courses)
-# print(courses)
-# students = []
-# input_student(students)
-# print(students)
