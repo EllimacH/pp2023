@@ -1,141 +1,180 @@
-import os
 import re
 
-students = []
-courses = []
-marks = []
 
-class student:
-    def __init__(self, student_name: str, student_id: str, student_DOB=str) -> None:
-        self.student_name = student_name
-        self.student_id = student_id
-        self.student_DOB = student_DOB
+class Classroom:
 
-    def get_student_name(self) -> str:
-        return self.student_name
+    def __init__(self) -> None:
+        self.student_list = []
 
-    def get_student_id(self) -> str:
-        return self.student_id
+    def input_student(self) -> None:
 
-    def get_student_DOB(self) -> str:
-        return self.student_DOB
+        # -------- Input student name ---------
+        student_name = input("Enter student name: ")
+        while True:
+            if re.match(r"[a-zA-Z ]+", student_name):
+                break
+            else:
+                student_name = input(
+                    "Student name is not valid, please try again : ")
 
+        # -------- Input student id ---------
+        student_id = input("Enter student id: ").upper()
+        while True:
+            if re.match(r"BI\d{2}-\d{3}", student_id):
+                break
+            else:
+                student_id = input(
+                    "Student id is not valid, please try again with format BIxx-yyy with x and y is number: ").upper()
 
-class course:
+        # -------- Input student DoB ---------
+        student_DOB = input("Enter student DoB: ")
+        while True:
+            if re.match(r"\d{2}-\d{2}-\d{4}", student_DOB) or re.match(r"\d{2}/\d{2}/\d{4}", student_DOB):
+                break
+            else:
+                student_DOB = input("DoB is not valid, please try again with format dd-mm-yyyy or dd/mm/yyyy: ")
 
-    def __init__(self, course_name: str, course_id: str) -> None:
-        self.course_name = course_name
-        self.course_id = course_id
+        self.student_list.append(
+            {
+                "student_name": student_name,
+                "student_id": student_id,
+                "student_DOB": student_DOB,
+                "marks": []
+            }
+        )
 
-    def __str__(self) -> str:
-        return f"Course name: {self.course_name}, Course id: {self.course_id}"
+    def input_mark(self, course_list: list) -> None:
 
-    def get_course_name(self) -> str:
-        return self.course_name
-
-    def get_course_id(self) -> str:
-        return self.course_id
-
-
-class mark:
-
-    def __init__(self, mark: float) -> None:
-        self.mark = mark
-
-    def get_mark(self) -> float:
-        return self.mark
-
-# Function to input student information
-
-def input_student() -> None:
-
-    student_name = input("Enter student name: ")
-    # check to see if student name is valid
-    while True:
-        # using regex to check if student name is valid
-        if re.match(r"[a-zA-Z ]+", student_name):
-            break
-        else:
-            student_name = input(
-                "Student name is not valid, please try again : ")
-
-    student_id = input("Enter student id: ").upper()
-    # if student id is BIxx-xxx (x is digit)
-    while True:
-        if re.match(r"BI\d{2}-\d{3}", student_id):
-            break
-        else:
-            student_id = input(
-                "Student id is not valid, please try again with format BIxx-yyy with x and y is number: ")
-
-    student_DOB = input("Enter student DoB: ")
-    # if DoB is xx-xx-xxxx or xx/xx/xxxx
-    while True:
-        if re.match(r"\d{2}-\d{2}-\d{4}", student_DOB) or re.match(r"\d{2}/\d{2}/\d{4}", student_DOB):
-            break
-        else:
-            student_DOB = input(
-                "DoB is not valid, please try again with format dd-mm-yyyy or dd/mm/yyyy: ")
-
-    studentt = student(student_name=student_name,
-                       student_id=student_id, student_DOB=student_DOB)
-    students.append(studentt)
-
-
-def input_course() -> None:
-    course_name = input('Enter course name: ')
-    course_id = input('Enter course id: ')
-    courses.append(course(course_name, course_id))
-
-
-def input_mark() -> None:
-    student_id_input = input(
-        "Enter student id you want to input mark: ").upper()
-    course_id_input = input("Enter course id you want to input mark: ")
-    mark_input = input("Enter mark: ")
-    selected_student = None
-    selected_course = None
-
-    for student in students:
-        if student.student_id == student_id_input:
-            selected_student = student
+        # -------- Input student id ---------
+        student_id_input = input("Enter student id you want to input mark: ").upper()
+        while True:
+            for student in self.student_list:
+                if student["student_id"] == student_id_input:
+                    break
+            else:
+                student_id_input = input("Student id not found, please try again: ").upper()
+                continue
             break
 
-    for course in courses:
-        if course.course_id == course_id_input:
-            selected_course = course
+        # -------- Input course id ---------
+        course_id_input = input("Enter course id you want to input mark: ")
+        while True:
+            for course in course_list:
+                if course["course_id"] == course_id_input:
+                    break
+            else:
+                course_id_input = input("Course id not found, please try again: ")
+                continue
             break
 
-    if selected_student is not None and selected_course is not None:
-        mark_object = mark(mark_input)
-        marks.append(mark_object)
-        selected_course.mark = mark_object
-        selected_student.course = selected_course
-    else:
-        print("Student or course not found")
+        # -------- Input mark ---------
+        mark_input = input("Enter mark: ")
+        while True:
+            try:
+                mark_input = float(mark_input)
+                if mark_input in range(0, 21):
+                    break
+                raise ValueError
+            except ValueError:
+                mark_input = input("Mark is not valid, please try again: ")
 
-def print_student() -> None:
-    for student in students:
-        print("="*20)
-        print("Student name: " + student.student_name)
-        print("Student id: " + student.student_id)
-        print("Date of birth: " + student.student_DOB)
-        print("Course name: " + student.course.get_course_name())
-        print("Course id: " + student.course.get_course_id())
-        print("Mark: " + str(student.course.mark.get_mark()))
-        print("="*20)
+        # -------- Add mark to student ---------
+        for student in self.student_list:
+            if student["student_id"] == student_id_input:
+                # 2 cases: if student has mark in course, update mark, else add new mark
+
+                # is_course_exist = False
+                # for marks_of_student in student["marks"]:
+                #     if marks_of_student["course_id"] == course_id_input:
+                #         is_course_exist = True
+                #         break
+
+                # if is_course_exist:
+                #     to_exit = input("Student has mark in this course, do you want to update mark? (y/n): ")
+                #     if to_exit == "y":
+                #         marks_of_student["mark"] = mark_input
+                #     else:
+                #         break
+
+                # else:
+                #     student["marks"].append(
+                #         {
+                #             "course_id": course_id_input,
+                #             "mark": mark_input
+                #         }
+                #     )
+
+                for marks_of_student in student["marks"]:
+                    if marks_of_student["course_id"] == course_id_input:
+                        to_exit = input("Student has mark in this course, do you want to update mark? (y/n): ")
+                        if to_exit == "y":
+                            marks_of_student["mark"] = mark_input
+                        else:
+                            break  # don't update mark, break the if/else of of asking the user whether to update mark or not
+                        break  # break the for loop, essentially break the else statement below
+                else:
+                    student["marks"].append(
+                        {
+                            "course_id": course_id_input,
+                            "mark": mark_input
+                        }
+                    )
+
+    def print_students_infos(self, course_list: list) -> None:
+        for student in self.student_list:
+            print("="*20)
+
+            print(f"- {student['student_name']} - {student['student_id']} - {student['student_DOB']}")
+            print("Marks:")
+            for mark in student["marks"]:
+
+                # -------- Get course name ---------
+                # We only have course id and mark, given the course_list, we can get the course name by looping through the course_list
+                course_name = ""
+                for course in course_list:
+                    if course["course_id"] == mark["course_id"]:
+                        course_name = course["course_name"]
+
+                print(f"Course: {course_name} ({mark['course_id']}): {mark['mark']}")
+
+            print("="*20)
 
 
-def print_course() -> None:
-    for course in courses:
-        print(course)
+class Courses:
+
+    def __init__(self) -> None:
+        self.course_list = []
+
+    def input_course(self) -> None:
+        course_name_input = input("Enter course name: ")
+
+        course_id_input = input("Enter course id: ")
+        while True:
+            for course in self.course_list:
+                if course["course_id"] == course_id_input:
+                    course_id_input = input("Course id is already exist, please try again: ")
+                    break
+            else:
+                break
+
+        self.course_list.append(
+            {
+                "course_name": course_name_input,
+                "course_id": course_id_input
+            }
+        )
+
+    def get_course_list(self) -> list:
+        return self.course_list
+
 
 def main():
 
-    while True:
+    classroom_info = Classroom()
+    courses_info = Courses()
 
-        print("\033c")  # clear screen
-        # print out all the options
+    while True:
+        print("\033c")
         print("1. Input student")
         print("2. Input course")
         print("3. Input mark")
@@ -144,27 +183,32 @@ def main():
         print("6. Exit")
 
         choice = input("Enter your option: ")
-        while True:
+        while True:  # ----- Check if choice is valid -----
             try:
                 choice = int(choice)
                 if choice in range(1, 7):
                     break
-                else:
-                    raise ValueError
+                raise ValueError
             except ValueError:
                 choice = input("Input not valid , please try again: ")
 
-        match choice:  # match the choice with the function
+        match choice:
             case 1:
-                input_student()
+                classroom_info.input_student()
             case 2:
-                input_course()
+                courses_info.input_course()
             case 3:
-                input_mark()
+                classroom_info.input_mark(courses_info.get_course_list())
             case 4:
-                print_student()
+                classroom_info.print_students_infos(courses_info.get_course_list())
             case 5:
-                print_course()
+                print("="*20)
+
+                course_list = courses_info.get_course_list()
+                for course in course_list:
+                    print(f"{course['course_name']} ({course['course_id']})")
+
+                print("="*20)
             case 6:
                 break
 
