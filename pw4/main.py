@@ -35,7 +35,8 @@ def main():
             case 3:
                 classroom_info.input_mark(courses_info.get_course_list())
             case 4:
-                classroom_info.print_students_infos(courses_info.get_course_list())
+                classroom_info.print_students_infos(
+                    courses_info.get_course_list())
             case 5:
                 print("="*20)
                 course_list = courses_info.get_course_list()
